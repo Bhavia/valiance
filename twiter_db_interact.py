@@ -11,9 +11,21 @@ class User(Document):
     location = StringField(max_length=100)
     search = StringField()
 
+def read_file():
+    file_name = 'credentials.txt'
+
+
+    with open(file_name) as f:
+        oauth = {}
+        for line in f:
+            if '=' in line:
+                name, value = line.split('=', 1)
+                oauth[name.strip()] = value.strip()
+        return oauth
+
 def makeDB(word='analytics'):
-    o = TwitterOAuth.read_file()
-    api = TwitterAPI(o.consumer_key,o.consumer_secret,o.access_token_key,o.access_token_secret)
+    o = read_file()
+    api = TwitterAPI(o['consumer_key'],o['consumer_secret'],o['access_token_key'],o['access_token_secret'])
     r = TwitterRestPager(api, 'search/tweets', {'q': word,'count':100})
 
 
@@ -22,7 +34,7 @@ def makeDB(word='analytics'):
     try:
         flag = 0
         for item in r.get_iterator():
-            if flag ==100:
+            if flag ==1000:
                 break
             flag+=1
             obj = User(U_id = item['user']['id'])
