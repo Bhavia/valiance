@@ -50,4 +50,4 @@ def result_twiter():
       return render_template("page2.html",data=json.dumps(d),data_keys=[{ "title": "Name" },{ "title": "Tweet"},{ "title": "Date"},{ "title": "Location"}])
 
 if __name__ == '__main__':
-   app.run(debug = True)
+   app.run(host='0.0.0.0',debug = True)
