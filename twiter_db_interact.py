@@ -34,7 +34,7 @@ def makeDB(word='analytics'):
     try:
         flag = 0
         for item in r.get_iterator():
-            if flag ==1000:
+            if flag ==100:
                 break
             flag+=1
             obj = User(U_id = item['user']['id'])
