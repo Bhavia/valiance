@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>Twitter result for new word</title>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+
+</head>
+<body>
+<div id="container" style="width: 550px; height: 400px; margin: 0 auto">
+    <table class="display"></table>
+</div>
+<script language="JavaScript">
+
+$(document).ready(function() {
+    var result = {{data|safe}}
+    llist = []
+    console.log(result)
+    for(var i=0;i<result.length;i++){
+        llist.push([result[i].name,result[i].text,result[i].date,result[i].location])
+    }
+    console.log(llist)
+    $('.display').DataTable( {
+        data: llist,
+        columns: {{data_keys|safe}},
+        "order": [[ 2, "desc" ]]
+    } );
+} );
+</script>
+</body>
+</html>

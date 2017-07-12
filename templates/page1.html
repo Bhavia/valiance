@@ -1,0 +1,133 @@
+<html>
+<head>
+<title>Twitter result for word analytics</title>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+   <script src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+<center>
+    <select onchange="weekordaily(this.value)">
+        <option value="">Choose an option</option>
+        <option value="result">Daily</option>
+        <option value="result2">Weekly</option>
+    </select>
+    <p>
+    Daily-> Displays line graph of number of tweets made on that particular date.
+    <br>
+    Weekly-> Dipalys line graph of number tweets made in that particulr week. X-axis is the starting date of the week(Monday).
+    </p>
+
+</center>
+<div align="right">
+    <form action="/page2" method = "POST">
+        <p>Enter Word <input type = "text" name = "word" /></p>
+        <input type="submit" value="Go to Page 2" />
+    </form>
+</div>>
+<div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
+<script language="JavaScript">
+
+function weekordaily(res){
+    resp = null;
+    if(res==="result"){
+        resp = {{result|safe}}
+    }
+    else if(res==="result2"){
+        resp = {{result2|safe}}
+    }
+    linefunc(resp);
+}
+function linefunc(result) {
+   var title = {
+      text: 'For word analytics No. of tweets in Line Graph'
+   };
+   var subtitle = {
+      text: 'Source: twitter.com'
+   };
+   var xAxis = {
+      categories: Object.keys(result)
+   };
+   var yAxis = {
+      title: {
+         text: 'No. of Tweets'
+      },
+      plotLines: [{
+         value: 0,
+         width: 1,
+         color: '#808080'
+      }]
+   };
+   var legend = {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'middle',
+      borderWidth: 0
+   };
+   var plotOptions = {
+      series: {
+         size:500,
+      }
+   }
+    var series= [{
+            name: 'No. of tweets',
+            data: Object.values(result)
+   }];
+
+   var json = {};
+   json.title = title;
+   json.plotOptions = plotOptions;
+   json.subtitle = subtitle;
+   json.xAxis = xAxis;
+   json.yAxis = yAxis;
+   json.legend = legend;
+   json.series = series;
+   $('#container').highcharts(json);
+
+}
+
+</script>
+<div id="container2" style="width: 550px; height: 400px; margin: 0 auto"></div>
+<script language="JavaScript">
+$(document).ready(function() {
+   var chart = {
+       plotBackgroundColor: null,
+       plotBorderWidth: null,
+       plotShadow: false
+   };
+   var title = {
+      text: 'Pie chart by Location'
+   };
+   var tooltip = {
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+   };
+   var plotOptions = {
+      pie: {
+         size: 300,
+         allowPointSelect: true,
+         cursor: 'pointer',
+         dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}%</b>: {point.percentage:.1f} %',
+            style: {
+               color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            }
+         }
+      }
+   };
+   var series= [{
+      type: 'pie',
+      name: 'Share of tweets from this location',
+      data: {{pie|tojson|safe }}
+   }];
+
+   var json = {};
+   json.chart = chart;
+   json.title = title;
+   json.tooltip = tooltip;
+   json.series = series;
+   json.plotOptions = plotOptions;
+   $('#container2').highcharts(json);
+});
+</script>
+</body>
+</html>
